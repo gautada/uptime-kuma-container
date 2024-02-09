@@ -12,6 +12,6 @@ container_version() {
 }
 
 container_entrypoint() {
- /bin/echo "This is the default entrypoint. You should overload the 'container_entrypoint()' function."
- /usr/bin/tail -f /dev/null
+ cd /uptime-kuma
+ /usr/bin/node server/server.js --port=8080
 }
