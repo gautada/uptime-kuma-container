@@ -1,0 +1,59 @@
+ARG ALPINE_VERSION=latest
+
+# │ STAGE: CONTAINER
+# ╰――――――――――――――――――――――――――――――――――――――――――――――――――――――
+FROM gautada/alpine:$ALPINE_VERSION as CONTAINER
+
+# ╭――――――――――――――――――――╮
+# │ METADATA           │
+# ╰――――――――――――――――――――╯
+LABEL source="https://github.com/gautada/uptime-kuma-container.git"
+LABEL maintainer="Adam Gautier <adam@gautier.org>"
+LABEL description="A container for uptime monitoring service"
+
+# ╭―
+# │ USER
+# ╰――――――――――――――――――――
+ARG USER=ukuma
+RUN /usr/sbin/usermod -l $USER alpine
+RUN /usr/sbin/usermod -d /home/$USER -m $USER
+RUN /usr/sbin/groupmod -n $USER alpine
+RUN /bin/echo "$USER:$USER" | /usr/sbin/chpasswd
+
+
+# ╭―
+# │ PRIVILEGES
+# ╰――――――――――――――――――――
+# COPY privileges /etc/container/privileges
+
+# ╭―
+# │ BACKUP
+# ╰――――――――――――――――――――
+# COPY backup /etc/container/backup
+
+
+# ╭―
+# │ ENTRYPOINT
+# ╰――――――――――――――――――――
+COPY entrypoint /etc/container/entrypoint
+
+
+# ╭――――――――――――――――――――╮
+# │ APPLICATION        │
+# ╰――――――――――――――――――――╯
+ARG UPTIME_KUMA_VERSION=1.23.11
+
+RUN git config --global advice.detachedHead false
+RUN git clone --branch $UPTIME_KUMA_VERSION --depth 1 https://github.com/louislam/uptime-kuma.git
+
+
+# ╭――――――――――――――――――――╮
+# │ CONTAINER          │
+# ╰――――――――――――――――――――╯
+# USER $USER
+VOLUME /mnt/volumes/backup
+VOLUME /mnt/volumes/configmaps
+VOLUME /mnt/volumes/container
+VOLUME /mnt/volumes/secrets
+VOLUME /mnt/volumes/source
+# WORKDIR /home/$USER

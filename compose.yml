@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  uptime-kuma:
+    build:
+      args:
+        ALPINE_VERSION: "latest"
+        CONTAINER_VERSION: "1.23.11"
+        UPTIME_KUMA_VERSION: "1.23.11"
+      context: .
+      dockerfile: container.build
+      no_cache: true  
+      
+      tags:
+        - "uptime-kuma:build"
+        - "gautada/uptime-kuma:build"
+        - "gautada/uptime-kuma:latest"
+    image: "gautada/uptime-kuma:latest"
+    ports:
+    - "8080:8080/tcp"
+    volumes:
+      - "Container:/mnt/volumes/container"
+      - "Backup:/mnt/volumes/backup"
+      - "Configmaps:/mnt/volumes/configmaps"
+      - "Secrets:/mnt/volumes/secrets"
+      
+volumes:
+  Container:
+    external: true
+    name: "Container"
+
+  Backup:
+    external: true
+    name: "Backup"
+
+  Configmaps:
+    external: true
+    name: "Configmaps"
+    
+  Secrets:
+    external: true
+    name: "Secrets"
