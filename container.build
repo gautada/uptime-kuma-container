@@ -43,7 +43,8 @@ COPY entrypoint /etc/container/entrypoint
 # ╰――――――――――――――――――――╯
 ARG UPTIME_KUMA_VERSION=1.23.11
 
-RUN apk add --no-cahce npm
+# COPY *.pem /
+RUN apk add --no-cache npm
 WORKDIR /
 RUN git config --global advice.detachedHead false
 RUN git clone --branch $UPTIME_KUMA_VERSION --depth 1 https://github.com/louislam/uptime-kuma.git
