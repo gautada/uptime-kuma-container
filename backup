@@ -1,0 +1,5 @@
+#!/bin/sh
+
+/bin/cp -r /mnt/volmues/container/* ./
+/usr/bin/sqlite3 /opt/uptime-kuma/data/kuma.db ".backup './kuma.db~'"
+/usr/bin/sqlite3 /opt/uptime-kuma/data/kuma.db ".dump" | /bin/gzip -c > ./kuma.gz~

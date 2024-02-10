@@ -1,0 +1,4 @@
+#!/bin/ash
+
+sleep 300
+/usr/bin/sqlite3 /opt/uptime-kuma/data/kuma.db ".dump" | /bin/gzip -c > /mnt/volumes/container/kuma.gz

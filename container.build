@@ -29,7 +29,7 @@ RUN /bin/echo "$USER:$USER" | /usr/sbin/chpasswd
 # ╭―
 # │ BACKUP
 # ╰――――――――――――――――――――
-# COPY backup /etc/container/backup
+COPY backup /etc/container/backup
 
 
 # ╭―
@@ -43,12 +43,22 @@ COPY entrypoint /etc/container/entrypoint
 # ╰――――――――――――――――――――╯
 ARG UPTIME_KUMA_VERSION=1.23.11
 
-# COPY *.pem /
-RUN apk add --no-cache npm
-WORKDIR /
+RUN apk add --no-cache npm sqlite
+
+COPY uk-stash /usr/bin/uk-stash
+RUN /bin/ln -fsv /usr/bin/uk-stash /etc/periodic/15min/uk-stash
+
+WORKDIR /opt
 RUN git config --global advice.detachedHead false
-RUN git clone --branch $UPTIME_KUMA_VERSION --depth 1 https://github.com/louislam/uptime-kuma.git
-WORKDIR /uptime-kuma
+RUN git clone --branch $UPTIME_KUMA_VERSION https://github.com/louislam/uptime-kuma.git
+# RUN /bin/cp -r /opt/uptime-kuma /opt/uptime-kuma~
+WORKDIR /opt/uptime-kuma
+# RUN mkdir -p data
+# RUN ln -fsv /mnt/volumes/container/screenshots /opt/uptime-kuma/data/screenshots
+# RUN ln -fsv /mnt/volumes/container/upload /opt/uptime-kuma/data/upload
+RUN ln -fsv /mnt/volumes/container/data /opt/uptime-kuma/data
+# RUN ln -fsv /mnt/volumes/container/data /opt/uptime-kuma/dist
+# RUN ln -fsv /mnt/volumes/container/data /opt/uptime-kuma/node_modules
 RUN /usr/bin/npm run setup
 
 
