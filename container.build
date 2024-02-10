@@ -14,7 +14,7 @@ LABEL description="A container for uptime monitoring service"
 # ╭―
 # │ USER
 # ╰――――――――――――――――――――
-ARG USER=ukuma
+ARG USER=uk
 RUN /usr/sbin/usermod -l $USER alpine
 RUN /usr/sbin/usermod -d /home/$USER -m $USER
 RUN /usr/sbin/groupmod -n $USER alpine
@@ -45,30 +45,27 @@ ARG UPTIME_KUMA_VERSION=1.23.11
 
 RUN apk add --no-cache npm sqlite
 
-COPY uk-stash /usr/bin/uk-stash
-RUN /bin/ln -fsv /usr/bin/uk-stash /etc/periodic/15min/uk-stash
+COPY stash-data /usr/bin/stash-data
+COPY periodic-stash-data /usr/bin/periodic-stash-data
+COPY unstash-data /usr/bin/unstash-data
+# RUN /bin/ln -fsv /usr/bin/periodic-stash-data /etc/periodic/15min/periodic-stash-data
 
 WORKDIR /opt
 RUN git config --global advice.detachedHead false
 RUN git clone --branch $UPTIME_KUMA_VERSION https://github.com/louislam/uptime-kuma.git
-# RUN /bin/cp -r /opt/uptime-kuma /opt/uptime-kuma~
 WORKDIR /opt/uptime-kuma
-# RUN mkdir -p data
-# RUN ln -fsv /mnt/volumes/container/screenshots /opt/uptime-kuma/data/screenshots
-# RUN ln -fsv /mnt/volumes/container/upload /opt/uptime-kuma/data/upload
-RUN ln -fsv /mnt/volumes/container/data /opt/uptime-kuma/data
-# RUN ln -fsv /mnt/volumes/container/data /opt/uptime-kuma/dist
-# RUN ln -fsv /mnt/volumes/container/data /opt/uptime-kuma/node_modules
-RUN /usr/bin/npm run setup
+
 
 
 # ╭――――――――――――――――――――╮
 # │ CONTAINER          │
 # ╰――――――――――――――――――――╯
-# USER $USER
+RUN /bin/chown -R $USER:$USER /opt/uptime-kuma 
+USER $USER
+RUN /usr/bin/npm run setup
 VOLUME /mnt/volumes/backup
 VOLUME /mnt/volumes/configmaps
 VOLUME /mnt/volumes/container
 VOLUME /mnt/volumes/secrets
 VOLUME /mnt/volumes/source
-# WORKDIR /home/$USER
+WORKDIR /home/$USER

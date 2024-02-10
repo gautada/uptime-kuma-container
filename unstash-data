@@ -1,0 +1,10 @@
+#!/bin/sh
+
+/bin/mv /opt/uptime-kuma/data /opt/uptime-kuma/data~
+/bin/mkidir /opt/uptime-kuma/data
+/bin/cp -r /mnt/volumes/container/stash/* /opt/uptime-kuma/data
+
+
+# if [ -f "/mnt/volumes/container/kuma.gz" ] ; then
+#  /bin/zcat /mnt/volumes/container/kuma.gz | /usr/bin/sqlite3 /opt/uptime-kuma/data/kuma.db 
+# fi

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# This is the script called by cron running as root.
+# This script sleeps for 5 miniutes to keep the 
+# overlap from backup at the top of the hour causing 
+# an issue. As this script is run from cron as root
+# the `stash-data` needs to be called as the uk user.
+
+USER=$(awk -F':' -v uid=1001 '$3 == uid { print $1 }' /etc/passwd)
+
+sleep 300
+/bin/su $USER -c ". /usr/bin/stash-data"
