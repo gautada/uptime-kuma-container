@@ -16,6 +16,6 @@ container_entrypoint() {
  if [ -f "/mnt/volumes/container/kuma.db~" ] ; then
   /usr/bin/unstash-data
  fi
- # /usr/bin/node server/server.js --port=8080
- tail -f /dev/null
+ /usr/bin/node server/server.js --port=8080
+ # tail -f /dev/null
 }
