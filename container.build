@@ -48,19 +48,21 @@ RUN apk add --no-cache npm sqlite
 COPY stash-data /usr/bin/stash-data
 COPY periodic-stash-data /usr/bin/periodic-stash-data
 COPY unstash-data /usr/bin/unstash-data
-# RUN /bin/ln -fsv /usr/bin/periodic-stash-data /etc/periodic/15min/periodic-stash-data
+RUN /bin/ln -fsv /usr/bin/periodic-stash-data /etc/periodic/15min/periodic-stash-data
 
 WORKDIR /opt
 RUN git config --global advice.detachedHead false
 RUN git clone --branch $UPTIME_KUMA_VERSION https://github.com/louislam/uptime-kuma.git
 WORKDIR /opt/uptime-kuma
-
-
+RUN /bin/mkdir -p /opt/uptime-kuma/data
+RUN /bin/ln -fsv /mnt/volumes/container/docker-tls /opt/uptime-kuma/data/docker-tls
+RUN /bin/ln -fsv /mnt/volumes/container/screenshots /opt/uptime-kuma/data/screenshots
+RUN /bin/ln -fsv /mnt/volumes/container/upload /opt/uptime-kuma/data/upload
 
 # ╭――――――――――――――――――――╮
 # │ CONTAINER          │
 # ╰――――――――――――――――――――╯
-RUN /bin/chown -R $USER:$USER /opt/uptime-kuma 
+RUN /bin/chown -R $USER:$USER /opt
 USER $USER
 RUN /usr/bin/npm run setup
 VOLUME /mnt/volumes/backup

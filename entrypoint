@@ -12,10 +12,10 @@ container_version() {
 }
 
 container_entrypoint() {
- # cd /opt/uptime-kuma
- # if [ -f "/mnt/volumes/container/kuma.gz" ] ; then
- #  /bin/zcat /mnt/volumes/container/kuma.gz | /usr/bin/sqlite3 /opt/uptime-kuma/data/kuma.db 
- # fi
- # /usr/bin/node server/server.js --port=8080
- tail -f /dev/null
+ cd /opt/uptime-kuma
+ if [ -f "/mnt/volumes/container/kuma.db~" ] ; then
+  /usr/bin/unstash-data
+ fi
+ /usr/bin/node server/server.js --port=8080
+ # tail -f /dev/null
 }
