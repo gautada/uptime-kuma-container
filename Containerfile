@@ -41,7 +41,8 @@ COPY entrypoint /etc/container/entrypoint
 # ╭――――――――――――――――――――╮
 # │ APPLICATION        │
 # ╰――――――――――――――――――――╯
-ARG UPTIME_KUMA_VERSION=1.23.11
+ARG CONTAINER_VERSION="1.0.0"
+ARG UPTIME_KUMA_VERSION="$CONTAINER_VERSION"
 
 RUN apk add --no-cache npm sqlite
 
