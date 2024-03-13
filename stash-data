@@ -1,0 +1,5 @@
+#!/bin/ash
+
+# Cache all of the data from the data directory
+
+/usr/bin/sqlite3 /opt/uptime-kuma/data/kuma.db ".backup '/mnt/volumes/container/kuma.db~'"

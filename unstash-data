@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/bin/cp -v /mnt/volumes/container/kuma.db~ /opt/uptime-kuma/data/kuma.db
